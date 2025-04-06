@@ -1,73 +1,81 @@
-let lista = JSON.parse(localStorage.getItem("lista")) || [];
-
-function salvarLista() {
-  localStorage.setItem("lista", JSON.stringify(lista));
-}
+let lista = [];
+let total = 0;
 
 function adicionarProduto() {
-  const input = document.getElementById("produtoInput");
-  const nome = input.value.trim();
-  if (nome !== "") {
-    lista.push({ nome, preco: 0, comprado: false });
-    salvarLista();
+  const input = document.getElementById('produtoInput');
+  const nomeProduto = input.value.trim();
+
+  if (nomeProduto !== "") {
+    lista.push({ nome: nomeProduto, comprado: false, preco: 0 });
     input.value = "";
     atualizarLista();
   }
 }
 
 function atualizarLista() {
-  const ul = document.getElementById("listaProdutos");
+  const ul = document.getElementById('listaProdutos');
   ul.innerHTML = "";
-  let total = 0;
+
+  total = 0;
 
   lista.forEach((item, index) => {
     const li = document.createElement("li");
-    li.className = "list-group-item d-flex justify-content-between align-items-center";
-    li.classList.toggle("comprado", item.comprado);
+    li.className = "list-group-item";
 
-    const nomeSpan = document.createElement("span");
-    nomeSpan.textContent = item.nome;
-    nomeSpan.style.cursor = "pointer";
-    nomeSpan.onclick = () => adicionarPreco(index);
+    const row = document.createElement("div");
+    row.className = "row align-items-center";
 
-    const precoSpan = document.createElement("span");
-    precoSpan.textContent = item.preco > 0 ? `R$ ${item.preco.toFixed(2)}` : "";
-
+    // Checkbox
+    const colCheck = document.createElement("div");
+    colCheck.className = "col-2 text-center";
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.checked = item.comprado;
     checkbox.onclick = () => {
-      item.comprado = checkbox.checked;
-      salvarLista();
+      item.comprado = !item.comprado;
       atualizarLista();
     };
+    colCheck.appendChild(checkbox);
 
-    li.appendChild(checkbox);
-    li.appendChild(nomeSpan);
-    li.appendChild(precoSpan);
+    // Nome do produto
+    const colNome = document.createElement("div");
+    colNome.className = "col-6";
+    colNome.textContent = item.nome;
+    if (item.comprado) colNome.classList.add("comprado");
+
+    // Campo de preço
+    const colPreco = document.createElement("div");
+    colPreco.className = "col-4";
+    const inputPreco = document.createElement("input");
+    inputPreco.type = "number";
+    inputPreco.placeholder = "0.00";
+    inputPreco.value = item.preco || "";
+    inputPreco.className = "form-control";
+    inputPreco.onchange = (e) => {
+      item.preco = parseFloat(e.target.value) || 0;
+      atualizarLista();
+    };
+    colPreco.appendChild(inputPreco);
+
+    // Soma preço se preenchido
+    if (!isNaN(item.preco)) {
+      total += item.preco;
+    }
+
+    // Monta a linha
+    row.appendChild(colCheck);
+    row.appendChild(colNome);
+    row.appendChild(colPreco);
+    li.appendChild(row);
     ul.appendChild(li);
-
-    if (item.preco > 0) total += item.preco;
   });
 
   document.getElementById("totalCompra").textContent = total.toFixed(2);
 }
 
-function adicionarPreco(index) {
-  const preco = parseFloat(prompt("Qual o preço desse item?", lista[index].preco || ""));
-  if (!isNaN(preco)) {
-    lista[index].preco = preco;
-    salvarLista();
-    atualizarLista();
-  }
-}
-
 function limparLista() {
-  if (confirm("Deseja apagar toda a lista?")) {
+  if (confirm("Deseja realmente limpar a lista?")) {
     lista = [];
-    salvarLista();
     atualizarLista();
   }
 }
-
-atualizarLista();
