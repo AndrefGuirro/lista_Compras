@@ -1,13 +1,14 @@
 const cacheName = 'lista-compras-v1';
 const arquivosParaCache = [
-  './',
-  './index.html',
-  './app.js',
-  './manifest.json',
-  './icon-192.png',
-  './icon-512.png',
-  'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css'
-];
+    './',
+    './index.html',
+    './app.js',
+    './manifest.json',
+    './imagens/logoCompra192.png',
+    './imagens/logoCompra512.png',
+    'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css'
+  ];
+  
 
 self.addEventListener('install', event => {
   event.waitUntil(
