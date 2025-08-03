@@ -1,81 +1,95 @@
 let lista = [];
-let total = 0;
+
+document.addEventListener("DOMContentLoaded", () => {
+  carregarListaSalva(); // Carrega a lista se existir
+  renderizarLista();
+});
 
 function adicionarProduto() {
   const input = document.getElementById('produtoInput');
-  const nomeProduto = input.value.trim();
+  const nome = input.value.trim();
 
-  if (nomeProduto !== "") {
-    lista.push({ nome: nomeProduto, comprado: false, preco: 0 });
-    input.value = "";
-    atualizarLista();
-  }
+  if (nome === '') return;
+
+  lista.push({ nome, preco: '', comprado: false });
+  input.value = '';
+  salvarLista();
+  renderizarLista();
 }
 
-function atualizarLista() {
+function renderizarLista() {
   const ul = document.getElementById('listaProdutos');
-  ul.innerHTML = "";
-
-  total = 0;
+  ul.innerHTML = '';
 
   lista.forEach((item, index) => {
-    const li = document.createElement("li");
-    li.className = "list-group-item";
+    const li = document.createElement('li');
+    li.className = 'list-group-item d-flex align-items-center justify-content-between';
 
-    const row = document.createElement("div");
-    row.className = "row align-items-center";
-
-    // Checkbox
-    const colCheck = document.createElement("div");
-    colCheck.className = "col-2 text-center";
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
     checkbox.checked = item.comprado;
-    checkbox.onclick = () => {
-      item.comprado = !item.comprado;
-      atualizarLista();
-    };
-    colCheck.appendChild(checkbox);
+    checkbox.className = 'form-check-input me-2';
+    checkbox.addEventListener('change', () => {
+      item.comprado = checkbox.checked;
+      salvarLista();
+      renderizarLista();
+    });
 
-    // Nome do produto
-    const colNome = document.createElement("div");
-    colNome.className = "col-6";
-    colNome.textContent = item.nome;
-    if (item.comprado) colNome.classList.add("comprado");
+    const nomeProduto = document.createElement('span');
+    nomeProduto.textContent = item.nome;
+    if (item.comprado) nomeProduto.classList.add('comprado');
 
-    // Campo de preço
-    const colPreco = document.createElement("div");
-    colPreco.className = "col-4";
-    const inputPreco = document.createElement("input");
-    inputPreco.type = "number";
-    inputPreco.placeholder = "0.00";
-    inputPreco.value = item.preco || "";
-    inputPreco.className = "form-control";
-    inputPreco.onchange = (e) => {
-      item.preco = parseFloat(e.target.value) || 0;
-      atualizarLista();
-    };
-    colPreco.appendChild(inputPreco);
+    const precoInput = document.createElement('input');
+    precoInput.type = 'number';
+    precoInput.placeholder = 'Preço';
+    precoInput.value = item.preco;
+    precoInput.className = 'form-control ms-2';
+    precoInput.style.maxWidth = '100px';
+    precoInput.addEventListener('input', () => {
+      item.preco = precoInput.value;
+      salvarLista();
+      atualizarTotal();
+    });
 
-    // Soma preço se preenchido
-    if (!isNaN(item.preco)) {
-      total += item.preco;
-    }
+    const containerEsquerda = document.createElement('div');
+    containerEsquerda.className = 'd-flex align-items-center';
+    containerEsquerda.appendChild(checkbox);
+    containerEsquerda.appendChild(nomeProduto);
 
-    // Monta a linha
-    row.appendChild(colCheck);
-    row.appendChild(colNome);
-    row.appendChild(colPreco);
-    li.appendChild(row);
+    const containerDireita = document.createElement('div');
+    containerDireita.appendChild(precoInput);
+
+    li.appendChild(containerEsquerda);
+    li.appendChild(containerDireita);
     ul.appendChild(li);
   });
 
-  document.getElementById("totalCompra").textContent = total.toFixed(2);
+  atualizarTotal();
+}
+
+function atualizarTotal() {
+  const total = lista.reduce((soma, item) => {
+    return soma + (parseFloat(item.preco) || 0);
+  }, 0);
+  document.getElementById('totalCompra').textContent = total.toFixed(2);
 }
 
 function limparLista() {
-  if (confirm("Deseja realmente limpar a lista?")) {
+  if (confirm('Tem certeza que deseja limpar a lista?')) {
     lista = [];
-    atualizarLista();
+    salvarLista();
+    renderizarLista();
+  }
+}
+
+// 🔒 Funções de persistência
+function salvarLista() {
+  localStorage.setItem('listaCompras', JSON.stringify(lista));
+}
+
+function carregarListaSalva() {
+  const dadosSalvos = localStorage.getItem('listaCompras');
+  if (dadosSalvos) {
+    lista = JSON.parse(dadosSalvos);
   }
 }
