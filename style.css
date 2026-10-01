@@ -1,0 +1,120 @@
+:root {
+  --primary-color: #2ecc71;
+  --bg-color: #f4f7f6;
+  --text-color: #333;
+  --border-color: #ddd;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-color);
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.container {
+  width: 100%;
+  max-width: 600px;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+h1 {
+  text-align: center;
+  color: var(--text-color);
+  margin-top: 0;
+}
+
+.form-add {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.form-add input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+.form-add button {
+  padding: 10px 20px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Estrutura de Tabela */
+.list-header, .item-row {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid var(--border-color);
+  gap: 10px;
+}
+
+.list-header {
+  font-weight: bold;
+  background: #eee;
+  border-radius: 4px 4px 0 0;
+}
+
+.item-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.col-check { width: 30px; display: flex; justify-content: center; }
+.col-nome  { flex: 2; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.col-qtd   { width: 60px; }
+.col-preco { width: 90px; }
+.col-acoes { width: 40px; text-align: right; }
+
+.item-row input[type="number"] {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.item-row.comprado .col-nome {
+  text-decoration: line-through;
+  color: #888;
+}
+
+.item-row.dragging {
+  opacity: 0.5;
+  background: #e1f5fe;
+}
+
+.btn-delete {
+  background: #ff5252;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.total-container {
+  margin-top: 20px;
+  text-align: right;
+  font-size: 1.2em;
+  padding-top: 10px;
+  border-top: 2px solid var(--text-color);
+}
+
+/* Ajuste mobile para o nome não quebrar o layout */
+.col-nome {
+  word-break: break-word;
+}
