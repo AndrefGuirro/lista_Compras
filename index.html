@@ -11,26 +11,26 @@
     <h1>Lista de Compras</h1>
 
     <form id="form-item" class="form-add">
-      <input type="text" id="input-item" placeholder="Adicionar produto..." required autocomplete="off">
+      <input type="text" id="input-item" placeholder="Novo produto..." required autocomplete="off">
       <button type="submit">Adicionar</button>
     </form>
 
     <div class="table-container">
       <div class="list-header">
-        <span class="col-check">✓</span>
-        <span class="col-nome">Produto</span>
-        <span class="col-qtd">Qtd</span>
-        <span class="col-preco">Preço</span>
-        <span class="col-acoes"></span>
+        <div class="col-check">✓</div>
+        <div class="col-nome">Produto</div>
+        <div class="col-qtd">Qtd</div>
+        <div class="col-preco">Preço</div>
+        <div class="col-acoes"></div>
       </div>
 
       <ul id="lista-compras" class="item-list">
-        <!-- Itens inseridos via app.js -->
+        <!-- Itens via app.js -->
       </ul>
     </div>
 
     <div class="total-container">
-      <span>Total da Compra:</span>
+      <span>Total:</span>
       <strong id="valor-total">R$ 0,00</strong>
     </div>
   </div>
